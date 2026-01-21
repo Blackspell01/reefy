@@ -41,6 +41,12 @@ struct SupplementContainerView: View {
     var body: some View {
         VStack(spacing: EdgeInsets.edgePadding) {
 
+            // Hidden top boundary for focus-based dismissal
+            Color.clear
+                .frame(height: 1)
+                .focused($isTopBoundaryFocused)
+                .focusable()
+
             HStack(spacing: 10) {
                 if containerState.isGuestSupplement, let supplement = containerState.selectedSupplement {
                     Button(supplement.displayTitle) {
