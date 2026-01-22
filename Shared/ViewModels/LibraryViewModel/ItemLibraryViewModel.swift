@@ -20,8 +20,8 @@ final class ItemLibraryViewModel: PagingLibraryViewModel<BaseItemDto> {
     override func get(page: Int) async throws -> [BaseItemDto] {
 
         let parameters = itemParameters(for: page)
-        let request = Paths.getItemsByUserID(userID: userSession.user.id, parameters: parameters)
-        let response = try await userSession.client.send(request)
+        let request = Paths.getItemsByUserID(userID: userSession!.user.id, parameters: parameters)
+        let response = try await userSession!.client.send(request)
 
         // 1 - only care to keep collections that hold valid items
         // 2 - if parent is type `folder`, then we are in a folder-view
@@ -116,13 +116,23 @@ final class ItemLibraryViewModel: PagingLibraryViewModel<BaseItemDto> {
 
     override func getRandomItem() async -> BaseItemDto? {
 
+        guard let userSession = currentSession else { return nil }
+
         var parameters = itemParameters(for: nil)
         parameters.limit = 1
         parameters.sortBy = [ItemSortBy.random.rawValue]
 
         let request = Paths.getItemsByUserID(userID: userSession.user.id, parameters: parameters)
-        let response = try? await userSession.client.send(request)
 
-        return response?.value.items?.first
+        let response: Response<BaseItemDtoQueryResult>
+
+        do {
+            response = try await userSession.client.send(request)
+        } catch {
+            logger.warning("Failed to fetch library items: \(error.localizedDescription)")
+            return nil
+        }
+
+        return response.value.items?.first
     }
 }

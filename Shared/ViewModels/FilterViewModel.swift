@@ -182,12 +182,12 @@ final class FilterViewModel: ViewModel, Stateful {
     private func getQueryFilters() async throws -> (genres: [ItemGenre], tags: [ItemTag], years: [ItemYear]) {
 
         let parameters = Paths.GetQueryFiltersLegacyParameters(
-            userID: userSession.user.id,
+            userID: userSession!.user.id,
             parentID: parent?.id
         )
 
         let request = Paths.getQueryFiltersLegacy(parameters: parameters)
-        let response = try await userSession.client.send(request)
+        let response = try await userSession!.client.send(request)
 
         let genres: [ItemGenre] = (response.value.genres ?? [])
             .map(ItemGenre.init)

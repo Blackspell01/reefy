@@ -304,7 +304,7 @@ class ItemViewModel: ViewModel, Stateful {
     }
 
     private func getFullItem() async throws -> BaseItemDto {
-        try await item.getFullItem(userSession: userSession)
+        try await item.getFullItem(userSession: userSession!)
     }
 
     private func getSimilarItems() async -> [BaseItemDto] {
@@ -329,7 +329,6 @@ class ItemViewModel: ViewModel, Stateful {
             return []
         }
     }
-    }
 
     private func getSpecialFeatures() async -> [BaseItemDto] {
         guard let itemID = item.id else { return [] }
@@ -349,21 +348,20 @@ class ItemViewModel: ViewModel, Stateful {
             return []
         }
     }
-    }
 
     private func getLocalTrailers() async throws -> [BaseItemDto] {
         guard let userSession = currentSession else { return [] }
 
-        let request = try Paths.getLocalTrailers(itemID: itemID, userID: userSession.user.id)
+        let itemId = try itemID
+        let request = try Paths.getLocalTrailers(itemID: itemId, userID: userSession.user.id)
 
         do {
             let response = try await userSession.client.send(request)
             return response.value ?? []
         } catch {
-            logger.warning("Failed to fetch local trailers for \(itemID): \(error.localizedDescription)")
+            logger.warning("Failed to fetch local trailers for \(itemId): \(error.localizedDescription)")
             return []
         }
-    }
     }
 
     private func getAdditionalParts() async throws -> [BaseItemDto] {
@@ -381,7 +379,6 @@ class ItemViewModel: ViewModel, Stateful {
             logger.warning("Failed to fetch additional parts for \(itemID): \(error.localizedDescription)")
             return []
         }
-    }
     }
 
     private func setIsPlayed(_ isPlayed: Bool) async throws {

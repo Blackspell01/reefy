@@ -90,6 +90,8 @@ final class ResetUserPasswordViewModel: ViewModel, Eventful, Stateful {
         let body = UpdateUserPassword(currentPw: current, newPw: new)
         let request = Paths.updateUserPassword(userID: userID, body)
 
+        guard let userSession = currentSession else { return }
+
         try await userSession.client.send(request)
     }
 }

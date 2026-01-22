@@ -44,7 +44,7 @@ extension PlaybackInformationSupplement {
 
         var iOSView: some View {
             VStack {
-                if let session = viewModel.currentSession {
+                if let session = viewModel.playbackSession {
                     Text(session.userName ?? "Unknown User")
                         .font(.caption)
                         .padding(6)
@@ -61,14 +61,14 @@ extension PlaybackInformationSupplement {
 class PlaybackInformationProvider: ViewModel, MediaPlayerObserver {
 
     @Published
-    var currentSession: SessionInfoDto? = nil
+    var playbackSession: SessionInfoDto? = nil
 
     weak var manager: MediaPlayerManager?
 
     private let itemID: String
     private let timer = PokeIntervalTimer()
 
-    private var currentSessionTask: AnyCancellable?
+    private var playbackSessionTask: AnyCancellable?
 
     init(itemID: String) {
         self.itemID = itemID
@@ -83,17 +83,17 @@ class PlaybackInformationProvider: ViewModel, MediaPlayerObserver {
     }
 
     private func getCurrentSession() {
-        currentSessionTask?.cancel()
+        playbackSessionTask?.cancel()
 
-        currentSessionTask = Task {
+        playbackSessionTask = Task {
             let parameters = Paths.GetSessionsParameters(
-                deviceID: userSession.client.configuration.deviceID
+                deviceID: userSession!.client.configuration.deviceID
             )
             let request = Paths.getSessions(
                 parameters: parameters
             )
 
-            let response = try await userSession.client.send(request)
+            let response = try await userSession!.client.send(request)
             guard let matchingSession = response.value.first(where: {
                 $0.nowPlayingItem?.id == itemID
             }) else {
@@ -101,7 +101,7 @@ class PlaybackInformationProvider: ViewModel, MediaPlayerObserver {
             }
 
             await MainActor.run {
-                self.currentSession = matchingSession
+                self.playbackSession = matchingSession
             }
         }
         .asAnyCancellable()

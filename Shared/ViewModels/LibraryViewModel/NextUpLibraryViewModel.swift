@@ -21,7 +21,7 @@ final class NextUpLibraryViewModel: PagingLibraryViewModel<BaseItemDto> {
 
         let parameters = parameters(for: page)
         let request = Paths.getNextUp(parameters: parameters)
-        let response = try await userSession.client.send(request)
+        let response = try await userSession!.client.send(request)
 
         return response.value.items ?? []
     }
@@ -38,7 +38,7 @@ final class NextUpLibraryViewModel: PagingLibraryViewModel<BaseItemDto> {
         }
         parameters.enableRewatching = Defaults[.Customization.Home.resumeNextUp]
         parameters.startIndex = page
-        parameters.userID = userSession.user.id
+        parameters.userID = userSession!.user.id
 
         return parameters
     }

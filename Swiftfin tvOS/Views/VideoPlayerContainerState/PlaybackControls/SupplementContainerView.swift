@@ -92,7 +92,7 @@ struct SupplementContainerView: View {
             if focusedSupplementID != containerState.selectedSupplement?.id {}
         }
         .onChange(of: isTopBoundaryFocused) { _, _ in
-            containerState.selectedSupplement = nil
+            containerState.select(supplement: nil)
         }
     }
 }

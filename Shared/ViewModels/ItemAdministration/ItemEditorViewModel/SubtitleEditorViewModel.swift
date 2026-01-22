@@ -256,7 +256,7 @@ final class SubtitleEditorViewModel: ViewModel, Stateful, Eventful {
         for index in indices {
             let request = Paths.deleteSubtitle(itemID: itemID, index: index)
             do {
-                _ = try await userSession.client.send(request)
+                _ = try await userSession!.client.send(request)
                 deletedIndices.insert(index)
             } catch {
                 throw ErrorMessage(L10n.failedDeletionAtIndexError(
@@ -279,7 +279,7 @@ final class SubtitleEditorViewModel: ViewModel, Stateful, Eventful {
             language: language,
             isPerfectMatch: isPerfectMatch
         )
-        let results = try await userSession.client.send(request)
+        let results = try await userSession!.client.send(request)
 
         return results.value
     }
@@ -295,7 +295,7 @@ final class SubtitleEditorViewModel: ViewModel, Stateful, Eventful {
             for subtitleID in subtitles {
                 group.addTask {
                     let request = Paths.downloadRemoteSubtitles(itemID: itemID, subtitleID: subtitleID)
-                    _ = try await self.userSession.client.send(request)
+                    _ = try await self.userSession!.client.send(request)
                 }
             }
 
@@ -311,7 +311,7 @@ final class SubtitleEditorViewModel: ViewModel, Stateful, Eventful {
         }
 
         let request = Paths.uploadSubtitle(itemID: itemID, subtitle)
-        _ = try await userSession.client.send(request)
+        _ = try await userSession!.client.send(request)
     }
 
     // MARK: - Refresh Item
@@ -325,10 +325,10 @@ final class SubtitleEditorViewModel: ViewModel, Stateful, Eventful {
 
         let request = Paths.getItem(
             itemID: itemID,
-            userID: userSession.user.id
+            userID: userSession!.user.id
         )
 
-        let response = try await userSession.client.send(request)
+        let response = try await userSession!.client.send(request)
 
         await MainActor.run {
             self.item = response.value

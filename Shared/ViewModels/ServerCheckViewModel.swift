@@ -36,11 +36,10 @@ final class ServerCheckViewModel: ViewModel {
     @Function(\Action.Cases.checkServer)
     private func _checkServer() async throws {
 
+        guard let userSession = currentSession else { throw ErrorMessage(L10n.unauthorizedUser) }
+
         try await userSession.server.updateServerInfo()
-
-        let request = Paths.getCurrentUser
         let response = try await userSession.client.send(request)
-
         userSession.user.data = response.value
         Container.shared.currentUserSession.reset()
         events.send(.connected)

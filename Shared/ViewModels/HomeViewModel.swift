@@ -174,23 +174,23 @@ final class HomeViewModel: ViewModel, Stateful {
 
     private func getResumeItems() async throws -> [BaseItemDto] {
         var parameters = Paths.GetResumeItemsParameters()
-        parameters.userID = userSession.user.id
+        parameters.userID = userSession!.user.id
         parameters.enableUserData = true
         parameters.fields = .MinimumFields
         parameters.mediaTypes = [.video]
         parameters.limit = 20
 
         let request = Paths.getResumeItems(parameters: parameters)
-        let response = try await userSession.client.send(request)
+        let response = try await userSession!.client.send(request)
 
         return response.value.items ?? []
     }
 
     private func getLibraries() async throws -> [LatestInLibraryViewModel] {
 
-        let parameters = Paths.GetUserViewsParameters(userID: userSession.user.id)
+        let parameters = Paths.GetUserViewsParameters(userID: userSession!.user.id)
         let userViewsPath = Paths.getUserViews(parameters: parameters)
-        async let userViews = userSession.client.send(userViewsPath)
+        async let userViews = userSession!.client.send(userViewsPath)
 
         async let excludedLibraryIDs = getExcludedLibraries()
 
@@ -211,6 +211,8 @@ final class HomeViewModel: ViewModel, Stateful {
     // TODO: use the more updated server/user data when implemented
     private func getExcludedLibraries() async throws -> [String] {
         let currentUserPath = Paths.getCurrentUser
+        guard let userSession = currentSession else { return [] }
+
         let response = try await userSession.client.send(currentUserPath)
 
         return response.value.configuration?.latestItemsExcludes ?? []
@@ -224,15 +226,15 @@ final class HomeViewModel: ViewModel, Stateful {
         if isPlayed {
             request = Paths.markPlayedItem(
                 itemID: itemID,
-                userID: userSession.user.id
+                userID: userSession!.user.id
             )
         } else {
             request = Paths.markUnplayedItem(
                 itemID: itemID,
-                userID: userSession.user.id
+                userID: userSession!.user.id
             )
         }
 
-        _ = try await userSession.client.send(request)
+        _ = try await userSession!.client.send(request)
     }
 }

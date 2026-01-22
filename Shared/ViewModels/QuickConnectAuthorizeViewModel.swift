@@ -52,6 +52,8 @@ final class QuickConnectAuthorizeViewModel: ViewModel {
         }
 
         let request = Paths.authorizeQuickConnect(code: code, userID: userID)
+        guard let userSession = currentSession else { throw ErrorMessage(L10n.unauthorizedUser) }
+
         let response = try await userSession.client.send(request)
 
         let decoder = JSONDecoder()

@@ -21,7 +21,7 @@ extension VideoPlayer.PlaybackControls.NavigationBar.ActionButtons {
         private var manager: MediaPlayerManager
 
         private var episodesSupplement: (any MediaPlayerSupplement)? {
-            manager.supplements.first { $0 is EpisodeMediaPlayerQueue }
+            manager.supplements.first { $0.id == "EpisodeMediaPlayerQueue" }
         }
 
         var body: some View {

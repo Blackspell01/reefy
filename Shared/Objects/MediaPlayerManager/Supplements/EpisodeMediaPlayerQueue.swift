@@ -85,13 +85,13 @@ class EpisodeMediaPlayerQueue: ViewModel, MediaPlayerQueue {
         guard let seriesID = item.seriesID, item.type == .episode else { return }
 
         let parameters = Paths.GetEpisodesParameters(
-            userID: userSession.user.id,
+            userID: userSession!.user.id,
             fields: .MinimumFields,
             adjacentTo: item.id!,
             limit: 3
         )
         let request = Paths.getEpisodes(seriesID: seriesID, parameters: parameters)
-        let response = try await userSession.client.send(request)
+        let response = try await userSession!.client.send(request)
 
         // 4 possible states:
         //  1 - only current episode
@@ -257,12 +257,6 @@ extension EpisodeMediaPlayerQueue {
 
         var body: some View {
             VStack(alignment: .leading, spacing: 24) {
-                // Season selector (if multiple seasons)
-                if viewModel.seasons.count > 1 {
-                    seasonSelector
-                }
-
-                // Episode scroll view
                 if let selectionViewModel {
                     TVOSEpisodeScrollView(
                         seasonViewModel: selectionViewModel,

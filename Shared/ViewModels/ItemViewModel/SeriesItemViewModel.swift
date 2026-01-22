@@ -81,10 +81,10 @@ final class SeriesItemViewModel: ItemViewModel {
         var parameters = Paths.GetNextUpParameters()
         parameters.fields = .MinimumFields
         parameters.seriesID = item.id
-        parameters.userID = userSession.user.id
+        parameters.userID = userSession!.user.id
 
         let request = Paths.getNextUp(parameters: parameters)
-        let response = try await userSession.client.send(request)
+        let response = try await userSession!.client.send(request)
 
         guard let item = response.value.items?.first, !item.isMissing else {
             return nil
@@ -98,13 +98,13 @@ final class SeriesItemViewModel: ItemViewModel {
     private func getResumeItem() async throws -> BaseItemDto? {
 
         var parameters = Paths.GetResumeItemsParameters()
-        parameters.userID = userSession.user.id
+        parameters.userID = userSession!.user.id
         parameters.fields = .MinimumFields
         parameters.limit = 1
         parameters.parentID = item.id
 
         let request = Paths.getResumeItems(parameters: parameters)
-        let response = try await userSession.client.send(request)
+        let response = try await userSession!.client.send(request)
 
         return response.value.items?.first
     }
@@ -122,10 +122,10 @@ final class SeriesItemViewModel: ItemViewModel {
         parameters.sortOrder = [.ascending]
 
         let request = Paths.getItemsByUserID(
-            userID: userSession.user.id,
+            userID: userSession!.user.id,
             parameters: parameters
         )
-        let response = try await userSession.client.send(request)
+        let response = try await userSession!.client.send(request)
 
         return response.value.items?.first
     }
@@ -138,13 +138,13 @@ final class SeriesItemViewModel: ItemViewModel {
 
         var parameters = Paths.GetSeasonsParameters()
         parameters.isMissing = Defaults[.Customization.shouldShowMissingSeasons] ? nil : false
-        parameters.userID = userSession.user.id
+        parameters.userID = userSession!.user.id
 
         let request = Paths.getSeasons(
             seriesID: seriesID,
             parameters: parameters
         )
-        let response = try await userSession.client.send(request)
+        let response = try await userSession!.client.send(request)
 
         return response.value.items ?? []
     }

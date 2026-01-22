@@ -9,6 +9,7 @@
 import Factory
 import Get
 import JellyfinAPI
+import Logging
 import UIKit
 
 // TODO: preload chapter images
@@ -57,7 +58,16 @@ class ChapterPreviewImageProvider: PreviewImageProvider {
             guard let chapterInfo = chapters[safe: chapterIndex], let imageUrl = chapterInfo.imageSource.url else { return nil }
             let request: Request<Data> = .init(url: imageUrl)
 
-            guard let response = try? await client.send(request) else { return nil }
+            guard let userSession = Container.shared.currentUserSession() else { return nil }
+
+            let response: Response<Foundation.Data>
+
+            do {
+                response = try await userSession.client.send(request)
+            } catch {
+                Logger.swiftfin().warning("Failed to fetch chapter preview image: \(error.localizedDescription)")
+                return nil
+            }
             guard let image = UIImage(data: response.value) else { return nil }
 
             return image

@@ -31,7 +31,7 @@ final class UserLocalSecurityViewModel: ViewModel, Eventful {
     // Will throw and send event if needing to prompt for old auth.
     func checkForOldPolicy() throws {
 
-        let oldPolicy = userSession.user.accessPolicy
+        let oldPolicy = userSession!.user.accessPolicy
 
         switch oldPolicy {
         case .requireDeviceAuthentication:
@@ -59,9 +59,9 @@ final class UserLocalSecurityViewModel: ViewModel, Eventful {
 
     func check(oldPin: String) throws {
 
-        if let storedPin = keychain.get("\(userSession.user.id)-pin") {
+        if let storedPin = keychain.get("\(userSession!.user.id)-pin") {
             if oldPin != storedPin {
-                eventSubject.send(.error(.init(L10n.incorrectPinForUser(userSession.user.username))))
+                eventSubject.send(.error(.init(L10n.incorrectPinForUser(userSession!.user.username))))
                 throw ErrorMessage("invalid pin")
             }
         }
@@ -70,12 +70,12 @@ final class UserLocalSecurityViewModel: ViewModel, Eventful {
     func set(newPolicy: UserAccessPolicy, newPin: String, newPinHint: String) {
 
         if newPolicy == .requirePin {
-            keychain.set(newPin, forKey: "\(userSession.user.id)-pin")
+            keychain.set(newPin, forKey: "\(userSession!.user.id)-pin")
         } else {
-            keychain.delete("\(userSession.user.id)-pin")
+            keychain.delete("\(userSession!.user.id)-pin")
         }
 
-        userSession.user.accessPolicy = newPolicy
-        userSession.user.pinHint = newPinHint
+        userSession!.user.accessPolicy = newPolicy
+        userSession!.user.pinHint = newPinHint
     }
 }

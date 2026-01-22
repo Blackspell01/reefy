@@ -87,11 +87,6 @@ final class SettingsViewModel: ViewModel {
     }
 
     func signOut() {
-        // Clear stored refresh password
-        if let userId = userSession?.user.id {
-            Container.shared.keychainService().delete("\(userId)-refreshPassword")
-        }
-
         // Attempt server-side logout first (fire and forget)
         Task {
             do {

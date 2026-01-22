@@ -26,7 +26,7 @@ struct UserProfileSettingsView: View {
 
     init(viewModel: SettingsViewModel) {
         self.viewModel = viewModel
-        self._profileImageViewModel = StateObject(wrappedValue: UserProfileImageViewModel(user: viewModel.userSession.user.data))
+        self._profileImageViewModel = StateObject(wrappedValue: UserProfileImageViewModel(user: viewModel.userSession!.user.data))
     }
 
     var body: some View {
@@ -50,9 +50,9 @@ struct UserProfileSettingsView: View {
 //            }
         }, image: {
             UserProfileImage(
-                userID: viewModel.userSession.user.id,
-                source: viewModel.userSession.user.profileImageSource(
-                    client: viewModel.userSession.client
+                userID: viewModel.userSession!.user.id,
+                source: viewModel.userSession!.user.profileImageSource(
+                    client: viewModel.userSession!.client
                 )
             )
             .aspectRatio(contentMode: .fit)
@@ -66,7 +66,7 @@ struct UserProfileSettingsView: View {
         ) {
             Button(L10n.reset, role: .destructive) {
                 do {
-                    try viewModel.userSession.user.deleteSettings()
+                    try viewModel.userSession!.user.deleteSettings()
                 } catch {
                     viewModel.logger.error("Unable to reset user settings: \(error.localizedDescription)")
                 }

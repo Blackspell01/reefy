@@ -96,7 +96,7 @@ final class DeleteItemViewModel: ViewModel, Stateful, Eventful {
         }
 
         let request = Paths.deleteItem(itemID: itemID)
-        _ = try await userSession.client.send(request)
+        _ = try await userSession!.client.send(request)
 
         await MainActor.run {
             Notifications[.didDeleteItem].post(itemID)

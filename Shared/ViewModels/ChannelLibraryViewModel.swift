@@ -16,14 +16,14 @@ final class ChannelLibraryViewModel: PagingLibraryViewModel<ChannelProgram> {
 
         var parameters = Paths.GetLiveTvChannelsParameters()
         parameters.fields = .MinimumFields
-        parameters.userID = userSession.user.id
+        parameters.userID = userSession!.user.id
         parameters.sortBy = [ItemSortBy.name]
 
         parameters.limit = pageSize
         parameters.startIndex = page * pageSize
 
         let request = Paths.getLiveTvChannels(parameters: parameters)
-        let response = try await userSession.client.send(request)
+        let response = try await userSession!.client.send(request)
 
         let processedChannels = try await getPrograms(for: response.value.items ?? [])
 
@@ -37,13 +37,13 @@ final class ChannelLibraryViewModel: PagingLibraryViewModel<ChannelProgram> {
 
         var parameters = Paths.GetLiveTvProgramsParameters()
         parameters.channelIDs = channels.compactMap(\.id)
-        parameters.userID = userSession.user.id
+        parameters.userID = userSession!.user.id
         parameters.maxStartDate = maxStartDate
         parameters.minEndDate = minEndDate
         parameters.sortBy = [ItemSortBy.startDate]
 
         let request = Paths.getLiveTvPrograms(parameters: parameters)
-        let response = try await userSession.client.send(request)
+        let response = try await userSession!.client.send(request)
 
         let groupedPrograms = (response.value.items ?? [])
             .grouped { program in

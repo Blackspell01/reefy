@@ -7,7 +7,9 @@
 //
 
 import Factory
+import Get
 import JellyfinAPI
+import Logging
 import UIKit
 
 // TODO: preload adjacent images
@@ -122,7 +124,7 @@ class TrickplayPreviewImageProvider: PreviewImageProvider {
         rows: Int,
         tileInterval: Duration
     ) -> Task<TrickplayImage?, Never> {
-        Task<TrickplayImage?, Never> { [weak self] () -> TrickplayImage? in
+        Task { [weak self] () -> TrickplayImage? in
             guard let tileWidth = self?.info.width else { return nil }
             guard let itemID = self?.itemID else { return nil }
             guard let client = Container.shared.currentUserSession()?.client else { return nil }
@@ -131,7 +133,16 @@ class TrickplayPreviewImageProvider: PreviewImageProvider {
                 width: tileWidth,
                 index: imageIndex
             )
-            guard let response = try? await client.send(request) else { return nil }
+            guard let userSession = Container.shared.currentUserSession() else { return nil }
+
+            let response: Response<Foundation.Data>
+
+            do {
+                response = try await userSession.client.send(request)
+            } catch {
+                Logger.swiftfin().warning("Failed to fetch trickplay preview image: \(error.localizedDescription)")
+                return nil
+            }
             guard let image = UIImage(data: response.value) else { return nil }
 
             let secondsRangeStart = tileImageDuration * Double(imageIndex)

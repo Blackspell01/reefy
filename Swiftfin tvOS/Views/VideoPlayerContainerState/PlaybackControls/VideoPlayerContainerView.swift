@@ -311,6 +311,14 @@ extension VideoPlayer {
             // Send event to SwiftUI for overlay toggle handling
             onPressEvent.send((type: buttonPress.type, phase: .began))
 
+            // For Menu button: swallow press when overlay/supplement is visible
+            // SwiftUI handles hiding overlay/dismissing supplement; we prevent UIKit from also dismissing the VC
+            if buttonPress.type == .menu,
+               containerState.isPresentingOverlay || containerState.isPresentingSupplement
+            {
+                return
+            }
+
             // Call super to allow UIKit focus navigation to work
             super.pressesBegan(presses, with: event)
         }

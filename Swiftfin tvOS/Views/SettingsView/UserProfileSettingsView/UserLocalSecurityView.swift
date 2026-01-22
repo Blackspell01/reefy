@@ -160,8 +160,8 @@ struct UserLocalSecurityView: View {
         .animation(.linear, value: signInPolicy)
         .navigationTitle(L10n.security)
         .onFirstAppear {
-            pinHint = viewModel.userSession.user.pinHint
-            signInPolicy = viewModel.userSession.user.accessPolicy
+            pinHint = viewModel.userSession!.user.pinHint
+            signInPolicy = viewModel.userSession!.user.accessPolicy
         }
         .onReceive(viewModel.events) { event in
             onReceive(event)
@@ -171,7 +171,7 @@ struct UserLocalSecurityView: View {
                 checkOldPolicy()
             } label: {
                 Group {
-                    if signInPolicy == .requirePin, signInPolicy == viewModel.userSession.user.accessPolicy {
+                    if signInPolicy == .requirePin, signInPolicy == viewModel.userSession!.user.accessPolicy {
                         Text(L10n.changePin)
                     } else {
                         Text(L10n.save)
@@ -203,7 +203,7 @@ struct UserLocalSecurityView: View {
 
             Button(L10n.cancel, role: .cancel) {}
         } message: { _ in
-            Text(L10n.enterPinForUser(viewModel.userSession.user.username))
+            Text(L10n.enterPinForUser(viewModel.userSession!.user.username))
         }
         .alert(
             L10n.setPin,
@@ -220,7 +220,7 @@ struct UserLocalSecurityView: View {
 
             Button(L10n.cancel, role: .cancel) {}
         } message: { _ in
-            Text(L10n.createPinForUser(viewModel.userSession.user.username))
+            Text(L10n.createPinForUser(viewModel.userSession!.user.username))
         }
         .errorMessage($error)
     }

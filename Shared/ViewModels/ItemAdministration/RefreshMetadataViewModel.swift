@@ -76,7 +76,7 @@ final class RefreshMetadataViewModel: ViewModel {
             itemID: itemId,
             parameters: parameters
         )
-        _ = try await userSession.client.send(request)
+        _ = try await userSession!.client.send(request)
 
         events.send(.refreshing)
         // TODO: Remove this call when we have a WebSocket
@@ -91,7 +91,7 @@ final class RefreshMetadataViewModel: ViewModel {
 
         // TODO: Call only this func via a Notification when we have a WebSocket
         // - We might be able to just get the full item/changes from the WebSocket
-        let newItem = try await item.getFullItem(userSession: userSession)
+        let newItem = try await item.getFullItem(userSession: userSession!)
 
         self.item = newItem
         self.progress = 0.0

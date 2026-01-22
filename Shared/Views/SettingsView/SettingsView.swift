@@ -52,22 +52,22 @@ struct SettingsView: View {
     @ViewBuilder
     private var serverSection: some View {
         Section {
-            UserProfileRow(user: viewModel.userSession.user.data) {
+            UserProfileRow(user: viewModel.userSession!.user.data) {
                 router.route(to: .userProfile(viewModel: viewModel))
             }
 
             ChevronButton(
                 L10n.server,
                 action: {
-                    router.route(to: .editServer(server: viewModel.userSession.server))
+                    router.route(to: .editServer(server: viewModel.userSession!.server))
                 }
             ) {
                 EmptyView()
             } subtitle: {
                 Label {
-                    Text(viewModel.userSession.server.name)
+                    Text(viewModel.userSession!.server.name)
                 } icon: {
-                    if !viewModel.userSession.server.isVersionCompatible {
+                    if !viewModel.userSession!.server.isVersionCompatible {
                         Image(systemName: "exclamationmark.circle.fill")
                     }
                 }
@@ -75,7 +75,7 @@ struct SettingsView: View {
             }
 
             #if os(iOS)
-            if viewModel.userSession.user.permissions.isAdministrator {
+            if viewModel.userSession!.user.permissions.isAdministrator {
                 ChevronButton(L10n.dashboard) {
                     router.route(to: .adminDashboard)
                 }

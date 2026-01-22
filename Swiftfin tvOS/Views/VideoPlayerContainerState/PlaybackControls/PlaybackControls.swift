@@ -35,11 +35,11 @@ extension VideoPlayer {
 
         // MARK: - Multi-Click Skip State
 
-        /// Skip amounts: [15s, 2min, 15min]
+        /// Skip amounts: [15s, 2min, 5min]
         private let skipAmounts: [Duration] = [
             .seconds(15),
             .seconds(120),
-            .seconds(900),
+            .seconds(300),
         ]
 
         @State
@@ -148,7 +148,7 @@ extension VideoPlayer {
                         }
 
                     // Skip explainer label
-                    Text("← → Skip: 1×=15s  2×=2min  3×=15min")
+                    Text("← → Skip: 1×=15s  2×=2min  3×=5min")
                         .font(.caption)
                         .foregroundStyle(.white.opacity(0.6))
                         .padding(.horizontal, 60)
@@ -235,10 +235,16 @@ extension VideoPlayer {
                     handleSkip(direction: .forward)
 
                 case (.menu, _):
-                    print("🎮 Menu press: isPresentingSupplement=\(isPresentingSupplement), isPresentingOverlay=\(isPresentingOverlay)")
+                    print(
+                        "🎮 Menu press: isPresentingSupplement=\(isPresentingSupplement), isPresentingOverlay=\(isPresentingOverlay), supplementRecentlyDismissed=\(containerState.supplementRecentlyDismissed)"
+                    )
                     if isPresentingSupplement {
                         print("🎮 Menu: Dismissing supplement")
-                        containerState.selectedSupplement = nil
+                        containerState.select(supplement: nil)
+                    } else if containerState.supplementRecentlyDismissed {
+                        print("🎮 Menu: Clearing recent supplement dismissal flag")
+                        // Supplement was just dismissed - clear flag but keep overlay visible
+                        containerState.supplementRecentlyDismissed = false
                     } else if isPresentingOverlay {
                         print("🎮 Menu: Hiding overlay")
                         // First menu press hides overlay

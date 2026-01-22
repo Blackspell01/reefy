@@ -35,6 +35,8 @@ final class ServerLogsViewModel: ViewModel {
     @Function(\Action.Cases.getLogs)
     private func _getLogs() async throws {
         let request = Paths.getServerLogs
+        guard let userSession = currentSession else { return }
+
         let response = try await userSession.client.send(request)
         let newLogs = OrderedSet(response.value)
         self.logs = newLogs

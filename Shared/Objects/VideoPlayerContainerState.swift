@@ -166,6 +166,9 @@ class VideoPlayerContainerState: ObservableObject {
     @Published
     var centerOffset: CGFloat = 0.0
 
+    /// Tracks when a supplement was recently dismissed to prevent immediate overlay hiding
+    var supplementRecentlyDismissed = false
+
     // MARK: - Hold-to-Scrub State
 
     @Published
@@ -291,6 +294,11 @@ class VideoPlayerContainerState: ObservableObject {
         if supplement?.id == selectedSupplement?.id {
             print("🔄 Dismissing supplement: \(selectedSupplement?.displayTitle ?? "none")")
             selectedSupplement = nil
+            supplementRecentlyDismissed = true
+            // Clear the flag after a short delay to allow Menu button logic to work properly
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.supplementRecentlyDismissed = false
+            }
             containerView?.presentSupplementContainer(false)
         } else {
             print("📱 Selecting supplement: \(supplement?.displayTitle ?? "none") (was: \(selectedSupplement?.displayTitle ?? "none"))")
@@ -307,7 +315,9 @@ class VideoPlayerContainerState: ObservableObject {
         let oldValue = isPresentingPlaybackControls
         isPresentingPlaybackControls = overlayState == .visible
         if oldValue != isPresentingPlaybackControls {
-            print("🎮 Playback controls visibility: \(oldValue) -> \(isPresentingPlaybackControls) (overlay: \(overlayState), supplement: \(supplementState))")
+            print(
+                "🎮 Playback controls visibility: \(oldValue) -> \(isPresentingPlaybackControls) (overlay: \(overlayState), supplement: \(supplementState))"
+            )
         }
     }
 

@@ -142,10 +142,10 @@ final class ProgramsViewModel: ViewModel, Stateful {
             .appending(.channelInfo)
         parameters.isAiring = true
         parameters.limit = 20
-        parameters.userID = userSession.user.id
+        parameters.userID = userSession!.user.id
 
         let request = Paths.getRecommendedPrograms(parameters: parameters)
-        let response = try await userSession.client.send(request)
+        let response = try await userSession!.client.send(request)
 
         return response.value.items ?? []
     }
@@ -157,7 +157,7 @@ final class ProgramsViewModel: ViewModel, Stateful {
             .appending(.channelInfo)
         parameters.hasAired = false
         parameters.limit = 20
-        parameters.userID = userSession.user.id
+        parameters.userID = userSession!.user.id
 
         parameters.isKids = section == .kids
         parameters.isMovie = section == .movies
@@ -166,7 +166,7 @@ final class ProgramsViewModel: ViewModel, Stateful {
         parameters.isSports = section == .sports
 
         let request = Paths.getLiveTvPrograms(parameters: parameters)
-        let response = try await userSession.client.send(request)
+        let response = try await userSession!.client.send(request)
 
         return response.value.items ?? []
     }
