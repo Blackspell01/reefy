@@ -348,6 +348,14 @@ extension VideoPlayer {
             // Send ended event to SwiftUI for hold detection
             onPressEvent.send((type: buttonPress.type, phase: .ended))
 
+            // For Menu button: swallow press when overlay/supplement is visible
+            // Mirror the pressesBegan logic to prevent UIKit from dismissing the VC
+            if buttonPress.type == .menu,
+               containerState.isPresentingOverlay || containerState.isPresentingSupplement
+            {
+                return
+            }
+
             // Call super to allow UIKit focus navigation to work
             super.pressesEnded(presses, with: event)
         }
