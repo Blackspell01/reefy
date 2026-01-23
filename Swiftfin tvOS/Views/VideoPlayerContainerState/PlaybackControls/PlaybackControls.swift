@@ -234,7 +234,7 @@ extension VideoPlayer {
                     // Skip forward with multi-click
                     handleSkip(direction: .forward)
 
-                case (.menu, _):
+                case (.menu, .began):
                     print(
                         "🎮 Menu press: isPresentingSupplement=\(isPresentingSupplement), isPresentingOverlay=\(isPresentingOverlay), supplementRecentlyDismissed=\(containerState.supplementRecentlyDismissed)"
                     )
