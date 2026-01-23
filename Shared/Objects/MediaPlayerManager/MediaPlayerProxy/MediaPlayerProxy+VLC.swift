@@ -119,6 +119,20 @@ extension VLCMediaPlayerProxy {
         @EnvironmentObject
         private var proxy: VLCVideoPlayer.Proxy
 
+        // State debouncing to prevent rapid play/pause toggles
+        @State
+        private var stateDebounceTask: Task<Void, Never>?
+        @State
+        private var lastReportedState: VLCUI.VLCVideoPlayer.State?
+
+        // Decode stall detection for VideoToolbox recovery
+        @State
+        private var consecutiveBufferingCount = 0
+        @State
+        private var lastPlayingTime: Date?
+        @State
+        private var stateChangeHistory: [(state: VLCUI.VLCVideoPlayer.State, time: Date)] = []
+
         private var isScrubbing: Bool {
             containerState.isScrubbing
         }
@@ -199,33 +213,64 @@ extension VLCMediaPlayerProxy {
                         Task { @MainActor in
                             manager.logger.trace("VLC state updated: \(state)")
 
-                            switch state {
-                            case .buffering,
-                                 .esAdded,
-                                 .opening:
-                                // TODO: figure out when to properly set to false
-                                manager.proxy?.isBuffering.value = true
-                            case .ended:
-                                // Live streams will send stopped/ended events
-                                guard !playbackItem.baseItem.isLiveStream else { return }
-                                manager.proxy?.isBuffering.value = false
-                                manager.ended()
-                            case .stopped: ()
-                            // Stopped is ignored as the `MediaPlayerManager`
-                            // should instead call this to be stopped, rather
-                            // than react to the event.
-                            case .error:
-                                manager.proxy?.isBuffering.value = false
-                                manager.error(ErrorMessage("VLC player is unable to perform playback"))
-                            case .playing:
-                                manager.proxy?.isBuffering.value = false
-                                manager.setPlaybackRequestStatus(status: .playing)
-                            case .paused:
-                                manager.setPlaybackRequestStatus(status: .paused)
+                            stateChangeHistory.append((state: state, time: Date()))
+                            if stateChangeHistory.count > 10 {
+                                stateChangeHistory.removeFirst()
                             }
 
-                            if let proxy = manager.proxy as? any VideoMediaPlayerProxy {
-                                proxy.videoSize.value = info.videoSize
+                            stateDebounceTask?.cancel()
+                            stateDebounceTask = Task { @MainActor in
+                                try? await Task.sleep(for: .milliseconds(300))
+                                guard !Task.isCancelled else { return }
+
+                                guard state != lastReportedState else {
+                                    manager.logger.trace("Skipping duplicate VLC state: \(state)")
+                                    return
+                                }
+
+                                if state == .buffering && lastReportedState == .playing {
+                                    consecutiveBufferingCount += 1
+
+                                    if consecutiveBufferingCount >= 5,
+                                       let lastPlaying = lastPlayingTime,
+                                       Date().timeIntervalSince(lastPlaying) < 10
+                                    {
+                                        manager.logger.warning(
+                                            "Detected decode stall (\(consecutiveBufferingCount) rapid buffering events), recreating player"
+                                        )
+                                        consecutiveBufferingCount = 0
+                                        proxy.playNewMedia(vlcConfiguration(for: playbackItem))
+                                        return
+                                    }
+                                }
+
+                                lastReportedState = state
+
+                                switch state {
+                                case .buffering,
+                                     .esAdded,
+                                     .opening:
+                                    manager.proxy?.isBuffering.value = true
+                                case .ended:
+                                    guard !playbackItem.baseItem.isLiveStream else { return }
+                                    manager.proxy?.isBuffering.value = false
+                                    await manager.ended()
+                                case .stopped: ()
+                                case .error:
+                                    manager.proxy?.isBuffering.value = false
+                                    await manager.error(ErrorMessage("VLC player is unable to perform playback"))
+                                case .playing:
+                                    consecutiveBufferingCount = 0
+                                    lastPlayingTime = Date()
+                                    manager.proxy?.isBuffering.value = false
+                                    await manager.setPlaybackRequestStatus(status: .playing)
+                                case .paused:
+                                    await manager.setPlaybackRequestStatus(status: .paused)
+                                }
+
+                                if let proxy = manager.proxy as? any VideoMediaPlayerProxy {
+                                    proxy.videoSize.value = info.videoSize
+                                }
                             }
                         }
                     }

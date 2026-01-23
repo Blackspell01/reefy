@@ -193,6 +193,7 @@ extension VideoPlayer {
             setupViews()
             setupConstraints()
             setupFocusObserver()
+            setupScenePhaseObserver()
 
             let gesture = UITapGestureRecognizer(target: self, action: #selector(ignorePress))
             gesture.allowedPressTypes = [NSNumber(value: UIPress.PressType.menu.rawValue)]
@@ -207,12 +208,27 @@ extension VideoPlayer {
             manager.stop()
         }
 
+        private func setupScenePhaseObserver() {
+            NotificationCenter.default
+                .publisher(for: UIScene.willEnterForegroundNotification)
+                .sink { [weak self] _ in
+                    guard let self else { return }
+                    Task { @MainActor in
+                        guard let playbackItem = self.manager.playbackItem else { return }
+
+                        self.manager.logger.info("App returned from background - recreating VLC player to reset decoder")
+
+                        self.manager.playbackItem = playbackItem
+                    }
+                }
+                .store(in: &cancellables)
+        }
+
         private func setupFocusObserver() {
             containerState.$overlayState
                 .removeDuplicates()
                 .sink { [weak self] (state: OverlayVisibility) in
                     guard let self else { return }
-                    // Delay focus update to allow views to layout
                     if state == .visible {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
                             self.setNeedsFocusUpdate()
