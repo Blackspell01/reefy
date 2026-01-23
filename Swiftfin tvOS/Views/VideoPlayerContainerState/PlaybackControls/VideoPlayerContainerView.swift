@@ -122,6 +122,8 @@ extension VideoPlayer {
 
         private var cancellables: Set<AnyCancellable> = []
 
+        private var isSwallowingMenuPress = false
+
         // MARK: - Focus Management
 
         override var preferredFocusEnvironments: [UIFocusEnvironment] {
@@ -328,10 +330,10 @@ extension VideoPlayer {
             onPressEvent.send((type: buttonPress.type, phase: .began))
 
             // For Menu button: swallow press when overlay/supplement is visible
-            // SwiftUI handles hiding overlay/dismissing supplement; we prevent UIKit from also dismissing the VC
             if buttonPress.type == .menu,
                containerState.isPresentingOverlay || containerState.isPresentingSupplement
             {
+                isSwallowingMenuPress = true
                 return
             }
 
@@ -348,11 +350,9 @@ extension VideoPlayer {
             // Send ended event to SwiftUI for hold detection
             onPressEvent.send((type: buttonPress.type, phase: .ended))
 
-            // For Menu button: swallow press when overlay/supplement is visible
-            // Mirror the pressesBegan logic to prevent UIKit from dismissing the VC
-            if buttonPress.type == .menu,
-               containerState.isPresentingOverlay || containerState.isPresentingSupplement
-            {
+            // For Menu button: swallow press if we swallowed the began event
+            if buttonPress.type == .menu, isSwallowingMenuPress {
+                isSwallowingMenuPress = false
                 return
             }
 
@@ -368,6 +368,12 @@ extension VideoPlayer {
 
             // Treat cancelled as ended for hold detection
             onPressEvent.send((type: buttonPress.type, phase: .cancelled))
+
+            // For Menu button: swallow press if we swallowed the began event
+            if buttonPress.type == .menu, isSwallowingMenuPress {
+                isSwallowingMenuPress = false
+                return
+            }
 
             // Call super
             super.pressesCancelled(presses, with: event)
