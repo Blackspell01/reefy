@@ -6,7 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
-## [Unreleased]
+## [1.0.0] - App Store Release
+
+**App Store Release**: Reefy is now live on the Apple App Store in 175 countries.
+
+**Version**: 1.0.0 (Build 81)
+**Availability**: 175 countries worldwide
+**Installation**: Search "Reefy Media Player" on Apple TV App Store
 
 ### Added
 
@@ -51,6 +57,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Removed dual state sync code from `VideoPlayerContainerState` (`didSet` observers that synced booleans to enums)
 - Removed commented-out legacy `NetworkError` implementation
+
+---
+
+## [Unreleased]
+
+### Added
+
+(empty - ready for future work)
+
+### Fixed
+
+(empty - ready for future work)
+
+### Changed
+
+(empty - ready for future work)
+
+### Removed
+
+(empty - ready for future work)
 
 ---
 

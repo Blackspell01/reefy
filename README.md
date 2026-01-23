@@ -6,6 +6,8 @@
 
 <img src="https://img.shields.io/badge/tvOS-17+-blue"/>
 <img src="https://img.shields.io/badge/Jellyfin-10.11-9962be"/>
+<img src="https://img.shields.io/badge/App%20Store-Available-blue"/>
+<img src="https://img.shields.io/badge/Countries-175-brightgreen"/>
 
 </div>
 
@@ -34,11 +36,33 @@ This project focuses purely on the tvOS experience — no iOS, just Apple TV.
 
 ---
 
-## Beta Program
+## Get Reefy
 
-**Reefy is currently in public beta.** Join to get early access and help shape the future of Apple TV media players.
+### App Store (Recommended)
 
-### Why I built this
+Reefy is available on the Apple App Store in 175 countries.
+
+**How to install:**
+1. On your Apple TV, open the App Store
+2. Search for "Reefy Media Player"
+3. Purchase and download ($8.99 USD one-time purchase)
+
+**Requirements:**
+- Apple TV (tvOS 17+ recommended, tvOS 18+ for Liquid Glass effects)
+- Jellyfin media server (10.11+ recommended)
+- $8.99 USD (one-time purchase, no subscriptions)
+
+*Note: tvOS apps can only be purchased directly on Apple TV. Search for "Reefy Media Player" in the tvOS App Store.*
+
+### Build from Source (Developers)
+
+Developers can build Reefy from source for free under the MPL 2.0 license.
+
+See [Documentation/contributing.md](Documentation/contributing.md) for build instructions.
+
+---
+
+## Why Reefy?
 
 I forked Swiftfin with a simple goal: **get something modern, fully working, and up to par with tvOS**. I wanted to access my Jellyfin videos without dealing with outdated apps, broken navigation, or missing features.
 
@@ -46,34 +70,17 @@ I forked Swiftfin with a simple goal: **get something modern, fully working, and
 
 - **Modern tvOS experience** — Native focus states, smooth navigation, tvOS 18 Liquid Glass effects
 - **Redesigned playback controls** — Clean transport bar that feels like Apple's own video players
-- **Fixed what was broken** — Resolved memory leaks, navigation traps, and stability issues from the original fork
+- **Fixed what was broken** — Resolved memory leaks, navigation traps, and stability issues
 - **VLC-based playback** — Wide codec support for all your media files
 - **tvOS-native UI** — Full-screen detail views, native progress slider, proper remote interaction
+- **Active development** — Regular updates and bug fixes
 
-### Beta Tester Requirements
+### Pricing & Source Code
 
-- Apple TV (tvOS 17+ recommended, tvOS 18+ for full effects)
-- Jellyfin media server (any version)
-- Willingness to test and provide feedback
+- **App Store**: $8.99 USD one-time purchase
+- **Source Code**: Free and open source (MPL 2.0 license)
 
-### What I'm Looking For
-
-I need testers who will:
-- Actually use the app day-to-day
-- Report bugs and usability issues
-- Suggest improvements based on real usage
-
-### Join the Beta
-
-🔗 **[Beta Signup Form](BETA SIGNUP CLOSED 1.17.26)**
-
-I'll be sending out TestFlight invites as capacity allows.
-
----
-
-## Installation
-
-Beta access is exclusively through the signup form above. TestFlight invites are sent to selected testers based on capacity and fit.
+The App Store price covers Apple's $99/year developer fee and commits me to ongoing support and updates. The source code is freely available for anyone who wants to build it themselves or contribute improvements.
 
 ---
 

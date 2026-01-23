@@ -1,5 +1,9 @@
 # TestFlight Beta Tester Import Workflow
 
+> **⚠️ ARCHIVED**: This workflow was used during Reefy's public beta program (ended January 17, 2026). Reefy is now available on the Apple App Store in 175 countries. This document is preserved for historical reference and potential future beta programs.
+
+---
+
 Automated workflow using Claude Code's Chrome tools to extract beta tester emails from Google Sheets and import them into TestFlight.
 
 ## Overview

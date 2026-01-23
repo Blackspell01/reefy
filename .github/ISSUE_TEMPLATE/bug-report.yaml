@@ -85,6 +85,7 @@ body:
       label: Reefy version
       description: The version/build of Reefy you are using
       options:
+        - 1.0.0 (Build 81) - App Store
         - 1.0.0 (Build 75)
         - 1.0.0 (Build 74)
         - 1.0.0 (Build 73)
@@ -98,7 +99,8 @@ body:
       label: Where did you install the app from?
       description: Choose the appropriate app store or installation method.
       options:
-        - TestFlight
+        - App Store
+        - TestFlight (Beta)
         - GitHub (self-built)
 
   - type: dropdown
