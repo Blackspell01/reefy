@@ -253,10 +253,14 @@ extension VideoPlayer {
                         }
                     } else {
                         print("🎮 Menu: Exiting playback")
-                        // Overlay hidden - exit playback
+                         // Overlay hidden - exit playback
                         manager.proxy?.stop()
                         router.dismiss()
                     }
+
+                case (.menu, .ended), (.menu, .cancelled):
+                    // Explicitly ignore - prevent falling to default case which would re-show overlay
+                    break
 
                 default:
                     // Other buttons show overlay
