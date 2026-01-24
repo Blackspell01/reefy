@@ -57,10 +57,19 @@ final class HomeViewModel: ViewModel, Stateful {
     private var backgroundRefreshTask: AnyCancellable?
     private var refreshTask: AnyCancellable?
 
-    var nextUpViewModel: NextUpLibraryViewModel = .init()
-    var recentlyAddedViewModel: RecentlyAddedLibraryViewModel = .init()
+    var nextUpViewModel: NextUpLibraryViewModel
+    var recentlyAddedViewModel: RecentlyAddedLibraryViewModel
 
-    override init() {
+    /// Initialize HomeViewModel with optional child ViewModels for testing
+    /// - Parameters:
+    ///   - nextUpViewModel: ViewModel for "Next Up" section (defaults to new instance)
+    ///   - recentlyAddedViewModel: ViewModel for "Recently Added" section (defaults to new instance)
+    init(
+        nextUpViewModel: NextUpLibraryViewModel = .init(),
+        recentlyAddedViewModel: RecentlyAddedLibraryViewModel = .init()
+    ) {
+        self.nextUpViewModel = nextUpViewModel
+        self.recentlyAddedViewModel = recentlyAddedViewModel
         super.init()
 
         Notifications[.itemMetadataDidChange]
@@ -173,24 +182,27 @@ final class HomeViewModel: ViewModel, Stateful {
     }
 
     private func getResumeItems() async throws -> [BaseItemDto] {
+        let session = try requireSession()
+
         var parameters = Paths.GetResumeItemsParameters()
-        parameters.userID = userSession!.user.id
+        parameters.userID = session.user.id
         parameters.enableUserData = true
         parameters.fields = .MinimumFields
         parameters.mediaTypes = [.video]
         parameters.limit = 20
 
         let request = Paths.getResumeItems(parameters: parameters)
-        let response = try await userSession!.client.send(request)
+        let response = try await session.client.send(request)
 
         return response.value.items ?? []
     }
 
     private func getLibraries() async throws -> [LatestInLibraryViewModel] {
+        let session = try requireSession()
 
-        let parameters = Paths.GetUserViewsParameters(userID: userSession!.user.id)
+        let parameters = Paths.GetUserViewsParameters(userID: session.user.id)
         let userViewsPath = Paths.getUserViews(parameters: parameters)
-        async let userViews = userSession!.client.send(userViewsPath)
+        async let userViews = session.client.send(userViewsPath)
 
         async let excludedLibraryIDs = getExcludedLibraries()
 
@@ -221,20 +233,21 @@ final class HomeViewModel: ViewModel, Stateful {
     private func setIsPlayed(_ isPlayed: Bool, for item: BaseItemDto) async throws {
         guard let itemID = item.id else { return }
 
+        let session = try requireSession()
         let request: Request<UserItemDataDto>
 
         if isPlayed {
             request = Paths.markPlayedItem(
                 itemID: itemID,
-                userID: userSession!.user.id
+                userID: session.user.id
             )
         } else {
             request = Paths.markUnplayedItem(
                 itemID: itemID,
-                userID: userSession!.user.id
+                userID: session.user.id
             )
         }
 
-        _ = try await userSession!.client.send(request)
+        _ = try await session.client.send(request)
     }
 }
