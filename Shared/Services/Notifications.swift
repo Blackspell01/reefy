@@ -100,6 +100,19 @@ enum Notifications {
         func subscribe(_ object: Any, selector: Selector, observed: Any) {
             notificationCenter.addObserver(object, selector: selector, name: name, object: observed)
         }
+
+        /// Returns a publisher that only emits payloads matching the predicate.
+        /// Reduces boilerplate when subscribing to notifications for a specific item.
+        ///
+        /// Example:
+        /// ```swift
+        /// Notifications[.itemMetadataDidChange]
+        ///     .filtered { $0.id == self?.item.id }
+        ///     .sink { updatedItem in ... }
+        /// ```
+        func filtered(_ predicate: @escaping (Payload) -> Bool) -> AnyPublisher<Payload, Never> {
+            publisher.filter(predicate).eraseToAnyPublisher()
+        }
     }
 
     static subscript<Payload>(key: Key<Payload>) -> Key<Payload> {

@@ -104,10 +104,8 @@ class ItemViewModel: ViewModel, Stateful {
         super.init()
 
         Notifications[.itemShouldRefreshMetadata]
-            .publisher
-            .sink { [weak self] itemID in
-                guard itemID == self?.item.id else { return }
-
+            .filtered { [weak self] itemID in itemID == self?.item.id }
+            .sink { [weak self] _ in
                 Task {
                     await self?.send(.backgroundRefresh)
                 }
@@ -115,10 +113,8 @@ class ItemViewModel: ViewModel, Stateful {
             .store(in: &cancellables)
 
         Notifications[.itemMetadataDidChange]
-            .publisher
+            .filtered { [weak self] newItem in newItem.id == self?.item.id }
             .sink { [weak self] newItem in
-                guard let newItemID = newItem.id, newItemID == self?.item.id else { return }
-
                 Task {
                     await self?.send(.replace(newItem))
                 }
