@@ -151,54 +151,46 @@ class DownloadTask: NSObject, ObservableObject {
         }
     }
 
-    private func downloadBackdropImage() async {
-
+    /// Downloads an image of the specified type for the item.
+    /// - Parameters:
+    ///   - imageType: The type of image to download (.backdrop or .primary)
+    ///   - maxWidth: Maximum width for the image
+    ///   - label: Label used for filename fallback (e.g., "Backdrop", "Primary")
+    private func downloadImage(_ imageType: ImageType, maxWidth: Int, label: String) async {
         guard let type = item.type else { return }
 
         let imageURL: URL
 
-        // TODO: move to BaseItemDto
         switch type {
         case .movie, .series:
-            guard let url = item.imageSource(.backdrop, maxWidth: 600).url else { return }
+            guard let url = item.imageSource(imageType, maxWidth: maxWidth).url else { return }
             imageURL = url
-        case .episode:
-            guard let url = item.imageSource(.primary, maxWidth: 600).url else { return }
+        case .episode where imageType == .backdrop:
+            // Episodes use primary image for backdrop display
+            guard let url = item.imageSource(.primary, maxWidth: maxWidth).url else { return }
             imageURL = url
         default:
             return
         }
 
-        guard let response = try? await userSession.client.download(
-            for: .init(url: imageURL).withResponse(URL.self),
-            delegate: self
-        ) else { return }
+        do {
+            let response = try await userSession.client.download(
+                for: .init(url: imageURL).withResponse(URL.self),
+                delegate: self
+            )
+            let filename = getImageFilename(from: response, secondary: label)
+            saveImage(from: response, filename: filename)
+        } catch {
+            logger.warning("Failed to download \(label) image for \(item.displayTitle): \(error.localizedDescription)")
+        }
+    }
 
-        let filename = getImageFilename(from: response, secondary: "Backdrop")
-        saveImage(from: response, filename: filename)
+    private func downloadBackdropImage() async {
+        await downloadImage(.backdrop, maxWidth: 600, label: "Backdrop")
     }
 
     private func downloadPrimaryImage() async {
-
-        guard let type = item.type else { return }
-
-        let imageURL: URL
-
-        switch type {
-        case .movie, .series:
-            guard let url = item.imageSource(.primary, maxWidth: 300).url else { return }
-            imageURL = url
-        default:
-            return
-        }
-
-        guard let response = try? await userSession.client.download(
-            for: .init(url: imageURL).withResponse(URL.self),
-            delegate: self
-        ) else { return }
-
-        let filename = getImageFilename(from: response, secondary: "Primary")
-        saveImage(from: response, filename: filename)
+        await downloadImage(.primary, maxWidth: 300, label: "Primary")
     }
 
     private func saveImage(from response: Response<URL>?, filename: String) {
@@ -255,6 +247,7 @@ class DownloadTask: NSObject, ObservableObject {
 
             return imagesFolder.appendingPathComponent(imageFilename)
         } catch {
+            logger.debug("Could not list images folder for \(item.displayTitle): \(error.localizedDescription)")
             return nil
         }
     }
@@ -268,6 +261,7 @@ class DownloadTask: NSObject, ObservableObject {
 
             return downloadFolder.appendingPathComponent(mediaFilename)
         } catch {
+            logger.debug("Could not list download folder for \(item.displayTitle): \(error.localizedDescription)")
             return nil
         }
     }

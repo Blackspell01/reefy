@@ -232,7 +232,7 @@ extension VideoPlayer {
                 .sink { [weak self] (state: OverlayVisibility) in
                     guard let self else { return }
                     if state == .visible {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + AnimationTiming.focusUpdateDelay) {
                             self.setNeedsFocusUpdate()
                             self.updateFocusIfNeeded()
                         }
@@ -245,7 +245,7 @@ extension VideoPlayer {
                 .sink { [weak self] (state: SupplementVisibility) in
                     guard let self else { return }
                     if state == .open {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + AnimationTiming.focusUpdateDelay) {
                             self.setNeedsFocusUpdate()
                             self.updateFocusIfNeeded()
                         }

@@ -208,7 +208,7 @@ extension VideoPlayer {
             }
             .onChange(of: isPresentingOverlay) { _, isPresenting in
                 if isPresenting {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + AnimationTiming.skipIndicatorResetDelay) {
                         focusGuide.transition(to: "sideButtons")
                     }
                 }

@@ -56,7 +56,7 @@ extension SeriesEpisodeSelector {
 
                 lastFocusedEpisodeID = playButtonItem?.id
 
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + AnimationTiming.quickFocusDelay) {
                     guard let playButtonItem else { return }
                     proxy.scrollTo(id: playButtonItem.unwrappedIDHashOrZero, animated: false)
                 }

@@ -95,7 +95,6 @@ class VideoPlayerContainerState: ObservableObject {
     var isPresentingOverlay: Bool {
         get { overlayState == .visible }
         set {
-            print("👁️ Overlay visibility: \(isPresentingOverlay) -> \(newValue)")
             if isGestureLocked {
                 // When locked, ignore attempts to show overlay
                 overlayState = .locked
@@ -296,7 +295,7 @@ class VideoPlayerContainerState: ObservableObject {
             selectedSupplement = nil
             supplementRecentlyDismissed = true
             // Clear the flag after a short delay to allow Menu button logic to work properly
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + AnimationTiming.quickFocusDelay) {
                 self.supplementRecentlyDismissed = false
             }
             containerView?.presentSupplementContainer(false)
@@ -363,7 +362,7 @@ class VideoPlayerContainerState: ObservableObject {
         // Auto-hide indicator after delay with cancellation support
         let currentID = UUID()
         skipIndicatorID = currentID
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + AnimationTiming.skipIndicatorAutoHideDelay) { [weak self] in
             guard let self, self.skipIndicatorID == currentID else { return }
             self.skipIndicatorText = nil
         }

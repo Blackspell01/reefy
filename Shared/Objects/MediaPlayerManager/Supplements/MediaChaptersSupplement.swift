@@ -199,7 +199,7 @@ extension MediaChaptersSupplement {
                 .onAppear {
                     if let currentChapter {
                         focusedChapter = currentChapter.id
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + AnimationTiming.quickFocusDelay) {
                             proxy.scrollTo(currentChapter.id, anchor: .center)
                         }
                     }

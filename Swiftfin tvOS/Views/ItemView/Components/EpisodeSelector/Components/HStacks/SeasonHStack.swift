@@ -79,7 +79,7 @@ extension SeriesEpisodeSelector {
                     guard !didScrollToPlayButtonSeason else { return }
                     didScrollToPlayButtonSeason = true
 
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + AnimationTiming.quickFocusDelay) {
                         guard let selection else { return }
 
                         proxy.scrollTo(selection)
