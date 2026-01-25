@@ -82,6 +82,11 @@ final class ConnectToServerViewModel: ViewModel {
 
         guard let url = URL(string: formattedURL) else { throw ErrorMessage("Invalid URL") }
 
+        // Validate IP address format if host looks like an IP
+        if let host = url.host, host.looksLikeIPv4Address, !host.isValidIPv4Address {
+            throw ErrorMessage(L10n.invalidIPAddress)
+        }
+
         // Log warning for non-HTTPS connections
         if url.scheme == "http" {
             logger.warning("Connecting to server over insecure HTTP connection: \(url.host ?? "unknown")")

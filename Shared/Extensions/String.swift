@@ -129,6 +129,22 @@ extension String {
     var url: URL? {
         URL(string: self)
     }
+
+    // MARK: - IPv4 Validation
+
+    /// Checks if string matches IPv4 pattern (4 dot-separated numbers)
+    var looksLikeIPv4Address: Bool {
+        let components = split(separator: ".")
+        guard components.count == 4 else { return false }
+        return components.allSatisfy { $0.allSatisfy(\.isNumber) }
+    }
+
+    /// Validates that all IPv4 octets are 0-255
+    var isValidIPv4Address: Bool {
+        let components = split(separator: ".")
+        guard components.count == 4 else { return false }
+        return components.allSatisfy { Int($0).map { (0 ... 255).contains($0) } ?? false }
+    }
 }
 
 extension CharacterSet {

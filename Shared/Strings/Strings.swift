@@ -760,6 +760,8 @@ internal enum L10n {
   internal static let interview = L10n.tr("Localizable", "interview", fallback: "Interview")
   /// Invalid format
   internal static let invalidFormat = L10n.tr("Localizable", "invalidFormat", fallback: "Invalid format")
+  /// Invalid IP address. Each number must be between 0 and 255 (e.g., 192.168.1.11).
+  internal static let invalidIPAddress = L10n.tr("Localizable", "invalidIPAddress", fallback: "Invalid IP address. Each number must be between 0 and 255 (e.g., 192.168.1.11).")
   /// Inverted dark
   internal static let invertedDark = L10n.tr("Localizable", "invertedDark", fallback: "Inverted dark")
   /// Inverted light
