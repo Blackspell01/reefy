@@ -133,6 +133,15 @@ class MediaProgressObserver: ViewModel, MediaPlayerObserver {
 
     private func sendStopReport(for item: MediaPlayerItem, seconds: Duration?) {
 
+        // Debug logging: Track what position is being reported to help diagnose
+        // why episodes may not be marked as played (server expects ~90% threshold)
+        if let seconds, let runtime = item.baseItem.runtime, runtime > .zero {
+            let percentage = (seconds.seconds / runtime.seconds) * 100
+            logger.info("📊 Stop report: '\(item.baseItem.displayTitle)' at \(Int(percentage))% (\(Int(seconds.seconds))s / \(Int(runtime.seconds))s)")
+        } else {
+            logger.warning("📊 Stop report: '\(item.baseItem.displayTitle)' - missing position or runtime data")
+        }
+
         #if DEBUG
         guard Defaults[.sendProgressReports] else { return }
         #endif
