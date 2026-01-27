@@ -105,10 +105,14 @@ class DownloadManager: ObservableObject {
 
         let jsonDecoder = JSONDecoder()
 
-        guard let offlineItem = try? jsonDecoder.decode(BaseItemDto.self, from: itemMetadataData) else { return nil }
-
-        let task = DownloadTask(item: offlineItem)
-        task.state = .complete
-        return task
+        do {
+            let offlineItem = try jsonDecoder.decode(BaseItemDto.self, from: itemMetadataData)
+            let task = DownloadTask(item: offlineItem)
+            task.state = .complete
+            return task
+        } catch {
+            logger.error("Failed to decode download metadata for item \(id): \(error.localizedDescription)")
+            return nil
+        }
     }
 }

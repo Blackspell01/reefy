@@ -9,6 +9,7 @@
 import Defaults
 import Factory
 import Foundation
+import Logging
 import SwiftUI
 import UIKit
 
@@ -18,6 +19,25 @@ import UIKit
 // Note: Only use Defaults for basic single-value settings.
 //       For larger data types and collections, use `StoredValue` instead.
 
+// MARK: Error Handling
+
+enum DefaultsError: LocalizedError {
+    case suiteCreationFailed(suiteName: String)
+
+    var errorDescription: String? {
+        switch self {
+        case let .suiteCreationFailed(suiteName):
+            return "Failed to create UserDefaults suite '\(suiteName)'"
+        }
+    }
+
+    var recoverySuggestion: String? {
+        "Using standard defaults as fallback. Check storage and restart."
+    }
+}
+
+private let logger = Logger.swiftfin()
+
 // MARK: Suites
 
 extension UserDefaults {
@@ -25,7 +45,13 @@ extension UserDefaults {
     // MARK: App
 
     /// Settings that should apply to the app
-    static let appSuite = UserDefaults(suiteName: "swiftfinApp")!
+    static let appSuite: UserDefaults = {
+        guard let suite = UserDefaults(suiteName: "swiftfinApp") else {
+            logger.critical("Failed to create appSuite, falling back to .standard", metadata: ["suite": "swiftfinApp"])
+            return .standard
+        }
+        return suite
+    }()
 
     // MARK: Usser
 
@@ -42,7 +68,11 @@ extension UserDefaults {
     }
 
     static func userSuite(id: String) -> UserDefaults {
-        UserDefaults(suiteName: id)!
+        guard let suite = UserDefaults(suiteName: id) else {
+            logger.critical("Failed to create userSuite, falling back to .standard", metadata: ["suite": "\(id)"])
+            return .standard
+        }
+        return suite
     }
 }
 
@@ -266,7 +296,13 @@ extension Defaults.Keys {
 
 extension UserDefaults {
 
-    static let debugSuite = UserDefaults(suiteName: "swiftfinstore-debug-defaults")!
+    static let debugSuite: UserDefaults = {
+        guard let suite = UserDefaults(suiteName: "swiftfinstore-debug-defaults") else {
+            logger.critical("Failed to create debugSuite, falling back to .standard", metadata: ["suite": "swiftfinstore-debug-defaults"])
+            return .standard
+        }
+        return suite
+    }()
 }
 
 extension Defaults.Keys {
