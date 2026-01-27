@@ -116,3 +116,10 @@ ChromeCastFramework.json
 
 Screenshots/
 marketing/
+
+# Personal code review and analysis notes
+Documentation/CODE_REVIEW.md
+Documentation/CODE_REVIEW_SUMMARY.md
+
+# Personal design and troubleshooting documentation
+docs/
