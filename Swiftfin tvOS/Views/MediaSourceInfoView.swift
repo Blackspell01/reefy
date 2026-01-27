@@ -28,7 +28,7 @@ struct MediaSourceInfoView: View {
                     .font(.title)
                     .frame(maxHeight: proxy.size.height * 0.33)
 
-                HStack {
+                HStack(spacing: 0) {
                     Form {
                         if let videoStreams = source.videoStreams,
                            videoStreams.isNotEmpty
@@ -69,6 +69,7 @@ struct MediaSourceInfoView: View {
                             }
                         }
                     }
+                    .frame(maxWidth: .infinity)
 
                     Form {
                         if let lastSelectedMediaStream {
@@ -114,6 +115,7 @@ struct MediaSourceInfoView: View {
                             }
                         }
                     }
+                    .frame(maxWidth: .infinity)
                 }
                 .padding(.horizontal)
             }
