@@ -187,6 +187,23 @@ extension VLCMediaPlayerProxy {
                 options["spdif"] = 1
             }
 
+            // Apply ReplayGain normalization for audio items
+            if baseItem.type == .audio,
+               Defaults[.VideoPlayer.Audio.replayGainEnabled],
+               let normalizationGain = baseItem.normalizationGain
+            {
+                let finalGain = ReplayGainCalculator.calculateFinalGain(
+                    normalizationGain: normalizationGain,
+                    preAmp: Defaults[.VideoPlayer.Audio.replayGainPreAmp],
+                    preventClipping: Defaults[.VideoPlayer.Audio.replayGainPreventClipping]
+                )
+
+                if finalGain != 0 {
+                    // VLC gain option uses linear scale, convert from dB
+                    options["gain"] = ReplayGainCalculator.dBToLinear(finalGain)
+                }
+            }
+
             configuration.options = options
 
             return configuration

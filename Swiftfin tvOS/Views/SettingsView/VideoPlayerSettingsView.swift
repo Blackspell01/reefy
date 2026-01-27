@@ -44,6 +44,17 @@ struct VideoPlayerSettingsView: View {
     @Default(.VideoPlayer.Audio.outputMode)
     private var audioOutputMode
 
+    // MARK: - ReplayGain (Audio Normalization)
+
+    @Default(.VideoPlayer.Audio.replayGainEnabled)
+    private var replayGainEnabled
+    @Default(.VideoPlayer.Audio.replayGainMode)
+    private var replayGainMode
+    @Default(.VideoPlayer.Audio.replayGainPreAmp)
+    private var replayGainPreAmp
+    @Default(.VideoPlayer.Audio.replayGainPreventClipping)
+    private var replayGainPreventClipping
+
     // MARK: - Subtitle
 
     @Default(.VideoPlayer.Subtitle.subtitleFontName)
@@ -69,6 +80,8 @@ struct VideoPlayerSettingsView: View {
     private var isPresentingAudioOffsetStepper: Bool = false
     @State
     private var isPresentingSubtitleOffsetStepper: Bool = false
+    @State
+    private var isPresentingPreAmpStepper: Bool = false
 
     var body: some View {
         Form(systemImage: "tv") {
@@ -135,6 +148,31 @@ struct VideoPlayerSettingsView: View {
                 Text(L10n.audio)
             } footer: {
                 Text(audioOutputMode.description)
+            }
+
+            // SECTION: Audio Normalization (ReplayGain)
+            Section {
+                Toggle("Volume Normalization", isOn: $replayGainEnabled)
+
+                if replayGainEnabled {
+                    ListRowMenu(
+                        "Mode",
+                        selection: $replayGainMode
+                    )
+
+                    ChevronButton(
+                        "Pre-Amp",
+                        subtitle: formatPreAmp(replayGainPreAmp)
+                    ) {
+                        isPresentingPreAmpStepper = true
+                    }
+
+                    Toggle("Prevent Clipping", isOn: $replayGainPreventClipping)
+                }
+            } header: {
+                Text("Audio Normalization")
+            } footer: {
+                Text("Adjusts volume between tracks for consistent listening. Requires server audio normalization scan.")
             }
 
             // SECTION: Subtitles
@@ -233,6 +271,27 @@ struct VideoPlayerSettingsView: View {
             )
             .valueFormatter { $0.millisecondLabel }
             .onCloseSelected { isPresentingSubtitleOffsetStepper = false }
+        }
+        .blurredFullScreenCover(isPresented: $isPresentingPreAmpStepper) {
+            StepperView(
+                title: "Pre-Amp",
+                description: "Additional gain adjustment. Positive values increase volume, negative decrease.",
+                value: $replayGainPreAmp,
+                range: -12 ... 12,
+                step: 1
+            )
+            .valueFormatter { formatPreAmp($0) }
+            .onCloseSelected { isPresentingPreAmpStepper = false }
+        }
+    }
+
+    // MARK: - Helpers
+
+    private func formatPreAmp(_ value: Float) -> String {
+        if value >= 0 {
+            return "+\(Int(value)) dB"
+        } else {
+            return "\(Int(value)) dB"
         }
     }
 }

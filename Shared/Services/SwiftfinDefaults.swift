@@ -272,6 +272,17 @@ extension Defaults.Keys {
             static let preferredLanguage: Key<String> = UserKey("preferredAudioLanguage", default: "eng")
             /// Audio output mode for handling surround sound on stereo devices
             static let outputMode: Key<AudioOutputMode> = UserKey("audioOutputMode", default: .auto)
+
+            // MARK: ReplayGain (Audio Normalization)
+
+            /// Enable ReplayGain volume normalization for audio tracks
+            static let replayGainEnabled: Key<Bool> = UserKey("replayGainEnabled", default: false)
+            /// ReplayGain mode: track (per-track) or album (preserve album dynamics)
+            static let replayGainMode: Key<ReplayGainMode> = UserKey("replayGainMode", default: .track)
+            /// Pre-amplification adjustment in dB (-12 to +12), added to ReplayGain value
+            static let replayGainPreAmp: Key<Float> = UserKey("replayGainPreAmp", default: 0.0)
+            /// Prevent clipping by limiting positive gains to 0 dB
+            static let replayGainPreventClipping: Key<Bool> = UserKey("replayGainPreventClipping", default: true)
         }
 
         enum Transition {
