@@ -52,7 +52,9 @@ struct YTMusicTrack: Identifiable, Hashable {
 
     // MARK: - Identifiable
 
-    var id: String { videoId }
+    var id: String {
+        videoId
+    }
 
     // MARK: - Computed Properties
 
@@ -95,6 +97,8 @@ extension YTMusicTrack {
         let queuePosition: Int
         let isCurrentlyPlaying: Bool
 
-        var id: String { "\(track.id)-\(queuePosition)" }
+        var id: String {
+            "\(track.id)-\(queuePosition)"
+        }
     }
 }

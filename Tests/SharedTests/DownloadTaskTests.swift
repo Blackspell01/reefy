@@ -125,10 +125,3 @@ final class DownloadTaskTests: XCTestCase {
         return item
     }
 }
-
-// MARK: - Test Helpers
-
-extension DownloadTask {
-    // Expose private methods for testing if needed
-    // Or use @testable import to access internal methods
-}

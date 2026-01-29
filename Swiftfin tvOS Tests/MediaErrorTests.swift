@@ -14,30 +14,30 @@ final class MediaErrorTests: XCTestCase {
 
     // MARK: - Error Description Tests
 
-    func testNoPlayableSourceDescription() {
+    func testNoPlayableSourceDescription() throws {
         let error = MediaError.noPlayableSource
         XCTAssertNotNil(error.errorDescription)
-        XCTAssertTrue(error.errorDescription!.contains("playable"))
+        XCTAssertTrue(try XCTUnwrap(error.errorDescription?.contains("playable")))
     }
 
-    func testUnsupportedFormatWithFormat() {
+    func testUnsupportedFormatWithFormat() throws {
         let error = MediaError.unsupportedFormat(format: "HEVC")
-        XCTAssertTrue(error.errorDescription!.contains("HEVC"))
+        XCTAssertTrue(try XCTUnwrap(error.errorDescription?.contains("HEVC")))
     }
 
-    func testUnsupportedFormatWithoutFormat() {
+    func testUnsupportedFormatWithoutFormat() throws {
         let error = MediaError.unsupportedFormat(format: nil)
-        XCTAssertTrue(error.errorDescription!.contains("format"))
+        XCTAssertTrue(try XCTUnwrap(error.errorDescription?.contains("format")))
     }
 
-    func testItemNotFoundWithId() {
+    func testItemNotFoundWithId() throws {
         let error = MediaError.itemNotFound(itemId: "abc123")
-        XCTAssertTrue(error.errorDescription!.contains("abc123"))
+        XCTAssertTrue(try XCTUnwrap(error.errorDescription?.contains("abc123")))
     }
 
-    func testItemNotFoundWithoutId() {
+    func testItemNotFoundWithoutId() throws {
         let error = MediaError.itemNotFound(itemId: nil)
-        XCTAssertTrue(error.errorDescription!.contains("not found"))
+        XCTAssertTrue(try XCTUnwrap(error.errorDescription?.contains("not found")))
     }
 
     // MARK: - Error Title Tests

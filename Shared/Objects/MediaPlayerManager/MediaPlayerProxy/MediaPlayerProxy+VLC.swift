@@ -94,7 +94,6 @@ class VLCMediaPlayerProxy: VideoMediaPlayerProxy,
         vlcUIProxy.setSubtitleSize(.absolute(fontSize))
     }
 
-    @ViewBuilder
     var videoPlayerBody: some View {
         VLCPlayerView()
             .environmentObject(vlcUIProxy)
@@ -119,13 +118,13 @@ extension VLCMediaPlayerProxy {
         @EnvironmentObject
         private var proxy: VLCVideoPlayer.Proxy
 
-        // State debouncing to prevent rapid play/pause toggles
+        /// State debouncing to prevent rapid play/pause toggles
         @State
         private var stateDebounceTask: Task<Void, Never>?
         @State
         private var lastReportedState: VLCUI.VLCVideoPlayer.State?
 
-        // Decode stall detection for VideoToolbox recovery
+        /// Decode stall detection for VideoToolbox recovery
         @State
         private var consecutiveBufferingCount = 0
         @State

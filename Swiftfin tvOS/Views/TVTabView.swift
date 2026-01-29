@@ -20,7 +20,9 @@ struct TVTabView: View {
         case tvShows
         case liveTV
 
-        var id: String { rawValue }
+        var id: String {
+            rawValue
+        }
 
         var displayTitle: String {
             switch self {
@@ -64,7 +66,6 @@ struct TVTabView: View {
     // MARK: - Section Picker
 
     /// Horizontal button row for switching between TV Shows and Live TV
-    @ViewBuilder
     private var sectionPicker: some View {
         HStack(spacing: 20) {
             ForEach(Section.allCases) { section in
@@ -74,7 +75,6 @@ struct TVTabView: View {
         .focusSection()
     }
 
-    @ViewBuilder
     private func sectionButton(for section: Section) -> some View {
         Button {
             selectedSection = section
@@ -123,7 +123,6 @@ struct TVTabView: View {
     // MARK: - Live TV Content
 
     /// Placeholder view for Live TV (Coming Soon)
-    @ViewBuilder
     private var liveContent: some View {
         VStack(spacing: 30) {
             Image(systemName: "antenna.radiowaves.left.and.right")

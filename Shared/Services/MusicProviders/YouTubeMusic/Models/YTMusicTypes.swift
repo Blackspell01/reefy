@@ -37,7 +37,9 @@ struct YTMusicArtistRef: Hashable, Codable {
     let name: String
 
     /// Whether this artist has a browseable page
-    var isBrowseable: Bool { id != nil }
+    var isBrowseable: Bool {
+        id != nil
+    }
 }
 
 // MARK: - Album Reference
@@ -48,7 +50,9 @@ struct YTMusicAlbumRef: Hashable, Codable {
     let name: String
 
     /// Whether this album has a browseable page
-    var isBrowseable: Bool { id != nil }
+    var isBrowseable: Bool {
+        id != nil
+    }
 }
 
 // MARK: - Album Type

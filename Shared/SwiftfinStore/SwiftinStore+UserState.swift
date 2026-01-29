@@ -167,7 +167,7 @@ extension UserState {
         return response.value
     }
 
-    // we will always crop to a square, so just use width
+    /// we will always crop to a square, so just use width
     func profileImageSource(
         client: JellyfinClient
     ) -> ImageSource {

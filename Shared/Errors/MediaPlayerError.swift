@@ -75,5 +75,7 @@ enum MediaPlayerError: LocalizedError, SystemImageable {
         }
     }
 
-    var secondarySystemImage: String { systemImage }
+    var secondarySystemImage: String {
+        systemImage
+    }
 }

@@ -42,7 +42,6 @@ extension VideoPlayer.PlaybackControls {
 
         // MARK: - Play/Pause Button
 
-        @ViewBuilder
         private var playPauseButton: some View {
             Button {
                 switch manager.playbackRequestStatus {
@@ -79,7 +78,6 @@ extension VideoPlayer.PlaybackControls {
 
         // MARK: - Jump Backward Button
 
-        @ViewBuilder
         private var jumpBackwardButton: some View {
             Button {
                 manager.proxy?.jumpBackward(jumpBackwardInterval.rawValue)
@@ -104,7 +102,6 @@ extension VideoPlayer.PlaybackControls {
 
         // MARK: - Jump Forward Button
 
-        @ViewBuilder
         private var jumpForwardButton: some View {
             Button {
                 manager.proxy?.jumpForward(jumpForwardInterval.rawValue)

@@ -9,15 +9,15 @@
 import Foundation
 import JellyfinAPI
 
-/// Mapping extensions to convert YouTube Music models to Jellyfin's BaseItemDto
-///
-/// BaseItemDto is Jellyfin's universal item type. By mapping YouTube Music models
-/// to BaseItemDto, we can reuse existing UI components designed for Jellyfin.
-///
-/// Key mappings:
-/// - YouTube `browseId` → BaseItemDto `id`
-/// - YouTube `thumbnails` → BaseItemDto image tags (with custom handling)
-/// - YouTube `videoId` → Stored in `externalUrls` for playback
+// Mapping extensions to convert YouTube Music models to Jellyfin's BaseItemDto
+//
+// BaseItemDto is Jellyfin's universal item type. By mapping YouTube Music models
+// to BaseItemDto, we can reuse existing UI components designed for Jellyfin.
+//
+// Key mappings:
+// - YouTube `browseId` → BaseItemDto `id`
+// - YouTube `thumbnails` → BaseItemDto image tags (with custom handling)
+// - YouTube `videoId` → Stored in `externalUrls` for playback
 
 // MARK: - Artist Mapping
 

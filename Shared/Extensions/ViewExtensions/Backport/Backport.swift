@@ -15,7 +15,6 @@ struct Backport<Content> {
 
 extension Backport where Content: View {
 
-    @ViewBuilder
     func buttonBorderShape(_ shape: ButtonBorderShape) -> some View {
         content.buttonBorderShape(shape.swiftUIValue)
     }
@@ -103,7 +102,6 @@ extension Backport where Content: View {
     }
 
     /// Applies a shadow effect based on focus state for depth perception on tvOS.
-    @ViewBuilder
     func focusedShadow(focused: Bool) -> some View {
         content
             .shadow(

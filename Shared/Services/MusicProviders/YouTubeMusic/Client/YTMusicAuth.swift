@@ -121,9 +121,9 @@ public final class YTMusicAuth: ObservableObject {
 
     /// Direct Google endpoints - only used for token refresh
     private enum Google {
-        // Note: Client credentials are stored on the bridge server, not in the app.
-        // The bridge handles the full OAuth exchange securely.
-        // We only need the token URL for refreshing tokens with the refresh_token.
+        /// Note: Client credentials are stored on the bridge server, not in the app.
+        /// The bridge handles the full OAuth exchange securely.
+        /// We only need the token URL for refreshing tokens with the refresh_token.
         static let tokenURL = URL(string: "https://oauth2.googleapis.com/token")!
 
         // These are still needed for token refresh requests

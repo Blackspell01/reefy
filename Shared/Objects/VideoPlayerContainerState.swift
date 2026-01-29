@@ -191,9 +191,9 @@ class VideoPlayerContainerState: ObservableObject {
     /// Whether currently in hold-scrubbing mode (vs just a tap)
     private var isHoldScrubbing: Bool = false
 
-    // Hold detection threshold (seconds)
+    /// Hold detection threshold (seconds)
     private let holdThreshold: TimeInterval = 0.3
-    // Acceleration tick interval (seconds)
+    /// Acceleration tick interval (seconds)
     private let accelerationTickInterval: TimeInterval = 0.1
 
     // MARK: - Components

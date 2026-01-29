@@ -149,7 +149,7 @@ struct UserSignInView: View {
             .textInputAutocapitalization(.never)
             .focused($focusedTextField, equals: .password)
             #if os(tvOS)
-                .frame(minHeight: 60)
+            .frame(minHeight: 60)
             #endif
         } header: {
             Text(L10n.signInToServer(viewModel.server.name))
@@ -215,7 +215,6 @@ struct UserSignInView: View {
 
     // MARK: - Public Users Section
 
-    @ViewBuilder
     private var publicUsersSection: some View {
         Section(L10n.publicUsers) {
             if viewModel.publicUsers.isEmpty {

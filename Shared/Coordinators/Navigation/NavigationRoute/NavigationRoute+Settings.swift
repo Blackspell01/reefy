@@ -12,7 +12,7 @@ import SwiftUI
 
 extension NavigationRoute {
 
-    // Action button selectors - available on both iOS and tvOS
+    /// Action button selectors - available on both iOS and tvOS
     static func actionBarButtonSelector(selectedButtonsBinding: Binding<[VideoPlayerActionButton]>) -> NavigationRoute {
         NavigationRoute(id: "actionButtonSelector") {
             ActionButtonSelectorView(selection: selectedButtonsBinding)

@@ -19,7 +19,6 @@ extension VideoPlayer.PlaybackControls.NavigationBar.ActionButtons {
         @Default(.VideoPlayer.Playback.appMaximumBitrate)
         private var currentBitrate
 
-        @ViewBuilder
         private var content: some View {
             ForEach(PlaybackBitrate.allCases, id: \.self) { bitrate in
                 Button {

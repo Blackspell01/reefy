@@ -137,7 +137,10 @@ class MediaProgressObserver: ViewModel, MediaPlayerObserver {
         // why episodes may not be marked as played (server expects ~90% threshold)
         if let seconds, let runtime = item.baseItem.runtime, runtime > .zero {
             let percentage = (seconds.seconds / runtime.seconds) * 100
-            logger.info("📊 Stop report: '\(item.baseItem.displayTitle)' at \(Int(percentage))% (\(Int(seconds.seconds))s / \(Int(runtime.seconds))s)")
+            logger
+                .info(
+                    "📊 Stop report: '\(item.baseItem.displayTitle)' at \(Int(percentage))% (\(Int(seconds.seconds))s / \(Int(runtime.seconds))s)"
+                )
         } else {
             logger.warning("📊 Stop report: '\(item.baseItem.displayTitle)' - missing position or runtime data")
         }

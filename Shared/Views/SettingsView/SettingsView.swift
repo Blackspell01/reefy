@@ -100,7 +100,6 @@ struct SettingsView: View {
     // MARK: - Library Section
 
     #if os(tvOS)
-    @ViewBuilder
     private var librarySection: some View {
         Section(L10n.library) {
             ChevronButton(L10n.media) {
@@ -112,7 +111,6 @@ struct SettingsView: View {
 
     // MARK: - Video Player Section
 
-    @ViewBuilder
     private var videoPlayerSection: some View {
         Section(L10n.videoPlayer) {
             #if os(iOS)
@@ -169,7 +167,6 @@ struct SettingsView: View {
 
     // MARK: - Diagnostics Section
 
-    @ViewBuilder
     private var diagnosticsSection: some View {
         Section {
             ChevronButton(L10n.logs) {

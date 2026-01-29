@@ -24,7 +24,6 @@ extension VideoPlayer.PlaybackControls.NavigationBar.ActionButtons {
             abs(manager.rate - rate) < 0.01
         }
 
-        @ViewBuilder
         private var content: some View {
             ForEach(presetRates, id: \.self) { rate in
                 Button {

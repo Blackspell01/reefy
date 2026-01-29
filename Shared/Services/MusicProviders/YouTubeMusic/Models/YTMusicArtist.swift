@@ -37,7 +37,9 @@ struct YTMusicArtist: Identifiable, Hashable {
 
     // MARK: - Identifiable
 
-    var browseId: String { id }
+    var browseId: String {
+        id
+    }
 
     // MARK: - Computed Properties
 

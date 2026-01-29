@@ -28,7 +28,6 @@ extension VideoPlayer.PlaybackControls.NavigationBar.ActionButtons {
             selectedAudioStreamIndex == nil ? "speaker.wave.2" : "speaker.wave.2.fill"
         }
 
-        @ViewBuilder
         private func content(playbackItem: MediaPlayerItem) -> some View {
             ForEach(playbackItem.audioStreams, id: \.index) { stream in
                 Button {

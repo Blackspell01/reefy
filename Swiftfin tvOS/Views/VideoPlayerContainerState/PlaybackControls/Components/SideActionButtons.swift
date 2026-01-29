@@ -105,7 +105,6 @@ extension VideoPlayer.PlaybackControls {
             "speaker.wave.2"
         }
 
-        @ViewBuilder
         private var content: some View {
             ForEach(playbackItem.audioStreams, id: \.index) { stream in
                 Button {
