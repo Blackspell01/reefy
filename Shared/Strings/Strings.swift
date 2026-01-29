@@ -1528,6 +1528,8 @@ internal enum L10n {
   internal static let title = L10n.tr("Localizable", "title", fallback: "Title")
   /// Total time
   internal static let totalTime = L10n.tr("Localizable", "totalTime", fallback: "Total time")
+  /// Track
+  internal static let track = L10n.tr("Localizable", "track", fallback: "Track")
   /// Trailer
   internal static let trailer = L10n.tr("Localizable", "trailer", fallback: "Trailer")
   /// Trailers
