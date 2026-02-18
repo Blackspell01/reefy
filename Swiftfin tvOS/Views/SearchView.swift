@@ -166,26 +166,43 @@ struct SearchView: View {
         )
     }
 
-    var body: some View {
-        ZStack {
-            switch viewModel.state {
-            case .error:
-                viewModel.error.map {
-                    ErrorView(error: $0)
-                }
-            case .initial:
-                if viewModel.hasNoResults {
-                    if viewModel.canSearch {
-                        Text(L10n.noResults)
-                    } else {
-                        suggestionsView
-                    }
-                } else {
-                    resultsView
-                }
-            case .searching:
-                ProgressView()
+    private var viewState: StateContainer<AnyView, AnyView>.ViewState {
+        switch viewModel.state {
+        case .error:
+            if let error = viewModel.error {
+                return .error(error)
             }
+            return .content
+        case .initial:
+            if searchQuery.isEmpty {
+                return .content
+            }
+            if viewModel.hasNoResults {
+                return .empty
+            }
+            return .content
+        case .searching:
+            return .loading
+        }
+    }
+
+    var body: some View {
+        StateContainer(
+            state: viewState
+        ) {
+            if searchQuery.isEmpty {
+                suggestionsView
+                    .eraseToAnyView()
+            } else {
+                resultsView
+                    .eraseToAnyView()
+            }
+        } emptyContent: {
+            EmptyStateView(
+                message: L10n.noResults,
+                systemImage: "magnifyingglass"
+            )
+            .eraseToAnyView()
         }
         .animation(.linear(duration: 0.1), value: viewModel.state)
         .ignoresSafeArea(edges: [.bottom, .horizontal])
