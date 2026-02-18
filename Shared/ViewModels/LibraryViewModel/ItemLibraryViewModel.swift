@@ -25,11 +25,11 @@ final class ItemLibraryViewModel: PagingLibraryViewModel<BaseItemDto> {
         // Debug: Log request start with key params
         let startTime = CFAbsoluteTimeGetCurrent()
         let itemTypes = parameters.includeItemTypes?.map(\.rawValue).joined(separator: ", ") ?? "all"
-        let requestURL = userSession?.client.fullURL(with: request)?.absoluteString ?? "unknown"
+        let endpoint = userSession?.client.fullURL(with: request)?.path ?? "unknown"
         logger.debug("Library request start", metadata: [
             "page": "\(page)",
             "itemTypes": "\(itemTypes)",
-            "url": "\(requestURL)",
+            "endpoint": "\(endpoint)",
         ])
 
         let response: Response<BaseItemDtoQueryResult>
