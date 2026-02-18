@@ -190,13 +190,14 @@ struct SearchView: View {
         StateContainer(
             state: viewState
         ) {
-            if searchQuery.isEmpty {
-                suggestionsView
-                    .eraseToAnyView()
-            } else {
-                resultsView
-                    .eraseToAnyView()
+            Group {
+                if searchQuery.isEmpty {
+                    suggestionsView
+                } else {
+                    resultsView
+                }
             }
+            .eraseToAnyView()
         } emptyContent: {
             EmptyStateView(
                 message: L10n.noResults,
