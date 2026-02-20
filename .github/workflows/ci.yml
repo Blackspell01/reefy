@@ -10,7 +10,7 @@ jobs:
     runs-on: macos-26
 
     env:
-      XCODE_VERSION: "26.3"
+      XCODE_VERSION: "26.2"
 
     steps:
       - name: Checkout
