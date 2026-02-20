@@ -6,7 +6,7 @@ on:
 jobs:
   build:
     name: "Build 🔨"
-    if: false  # Disabled - requires tvOS 26 SDK
+    # if: false  # Disabled - requires tvOS 26 SDK
     runs-on: macos-15
 
     env:
