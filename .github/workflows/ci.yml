@@ -32,9 +32,6 @@ jobs:
           key: ${{ runner.os }}-carthage-${{ hashFiles('**/Cartfile.resolved') }}
           restore-keys: ${{ runner.os }}-carthage-
 
-      - name: List Schemes
-        run: xcodebuild -list -project Swiftfin.xcodeproj
-      
       - name: Update Carthage
         run: carthage update --use-xcframeworks --cache-builds
 
@@ -46,4 +43,5 @@ jobs:
             -destination "generic/platform=tvOS" \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
-            SWIFT_PACKAGE_PLUGIN_TRUST_LEVEL=0
+            -skipPackagePluginValidation \
+            -skipMacroValidation
