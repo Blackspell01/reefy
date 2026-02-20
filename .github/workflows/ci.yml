@@ -40,6 +40,6 @@ jobs:
           xcodebuild build \
             -project Swiftfin.xcodeproj \
             -scheme "Swiftfin tvOS" \
-            -destination "generic/platform=tvOS Simulator" \
-            CODE_SIGN_IDENTITY="" \
+            -destination "generic/platform=tvOS" \
+            CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO
