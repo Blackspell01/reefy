@@ -28,14 +28,26 @@ jobs:
 
       - name: Update Carthage
         run: carthage update --use-xcframeworks --cache-builds
-
-      - name: Build
+      
+      - name: Archive
         run: |
-          xcodebuild build \
+          xcodebuild archive \
             -project Swiftfin.xcodeproj \
             -scheme "Swiftfin tvOS" \
-            -destination "generic/platform=tvOS Simulator" \
+            -destination "generic/platform=tvOS" \
+            -archivePath build/Reefy.xcarchive \
+            -skipMacroValidation \
             CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO \
-            -skipPackagePluginValidation \
-            -skipMacroValidation
+            CODE_SIGNING_REQUIRED=NO
+
+      - name: Create IPA
+        run: |      
+          mkdir -p build/Payload
+          cp -r build/Reefy.xcarchive/Products/Applications/*.app build/Payload/
+          cd build && zip -r Reefy.ipa Payload
+      
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: Reefy.ipa
+          path: build/Reefy.ipa
