@@ -45,4 +45,5 @@ jobs:
             -scheme "Swiftfin tvOS" \
             -destination "generic/platform=tvOS" \
             CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO
+            CODE_SIGNING_REQUIRED=NO \
+            SWIFT_PACKAGE_PLUGIN_TRUST_LEVEL=0
