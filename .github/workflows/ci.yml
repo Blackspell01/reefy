@@ -1,7 +1,9 @@
 name: "Build 🔨"
 
 on:
-  workflow_dispatch:  # Ermöglicht manuelle Auslöser
+  push:
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -27,6 +29,9 @@ jobs:
           key: ${{ runner.os }}-carthage-${{ hashFiles('**/Cartfile.resolved') }}
           restore-keys: ${{ runner.os }}-carthage-
 
+      - name: List Schemes
+        run: xcodebuild -list -project Swiftfin.xcodeproj
+      
       - name: Update Carthage
         run: carthage update --use-xcframeworks --cache-builds
 
