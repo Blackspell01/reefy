@@ -7,10 +7,10 @@ jobs:
   build:
     name: "Build 🔨"
     # if: false  # Disabled - requires tvOS 26 SDK
-    runs-on: macos-15
+    runs-on: macos-26
 
     env:
-      XCODE_VERSION: "16.4"
+      XCODE_VERSION: "26.3"
 
     steps:
       - name: Checkout
