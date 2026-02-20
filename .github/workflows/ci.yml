@@ -1,15 +1,7 @@
 name: "Build 🔨"
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    types:
-      - opened
-      - reopened
-      - synchronize
-      - ready_for_review
-    branches: [ main ]
+  workflow_dispatch:  # Ermöglicht manuelle Auslöser
 
 jobs:
   build:
